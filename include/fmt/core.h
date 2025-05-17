@@ -103,12 +103,13 @@
 #  define FMT_CONSTEXPR constexpr
 #else
 #  define FMT_CONSTEXPR
+#  define FMT_CONSTEVAL
 #endif
 
 #if ((FMT_CPLUSPLUS >= 202002L) &&                            \
      (!defined(_GLIBCXX_RELEASE) || _GLIBCXX_RELEASE > 9)) || \
     (FMT_CPLUSPLUS >= 201709L && FMT_GCC_VERSION >= 1002)
-#  define FMT_CONSTEXPR20 constexpr
+#  define FMT_CONSTEXPR20 FMT_CONSTEXPR
 #else
 #  define FMT_CONSTEXPR20
 #endif
@@ -123,7 +124,7 @@
     _LIBCPP_VERSION >= 4000
 #  define FMT_CONSTEXPR_CHAR_TRAITS constexpr
 #elif FMT_MSC_VERSION >= 1914 && FMT_CPLUSPLUS >= 201703L
-#  define FMT_CONSTEXPR_CHAR_TRAITS constexpr
+#  define FMT_CONSTEXPR_CHAR_TRAITS FMT_CONSTEXPR
 #endif
 #ifndef FMT_CONSTEXPR_CHAR_TRAITS
 #  define FMT_CONSTEXPR_CHAR_TRAITS
@@ -305,7 +306,7 @@ namespace detail {
 // (void)var does not work on many Intel compilers.
 template <typename... T> FMT_CONSTEXPR void ignore_unused(const T&...) {}
 
-constexpr FMT_INLINE auto is_constant_evaluated(
+FMT_CONSTEXPR FMT_INLINE auto is_constant_evaluated(
     bool default_value = false) noexcept -> bool {
 // Workaround for incompatibility between libstdc++ consteval-based
 // std::is_constant_evaluated() implementation and clang-14.
